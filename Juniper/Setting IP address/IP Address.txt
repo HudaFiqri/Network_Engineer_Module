@@ -1,0 +1,32 @@
+# ditulis pada 17-04-2021
+
+
+# konfigurasi router 1
+
+# setting ip address pada router 1
+set interfaces em0 unit 0 family inet address 10.10.10.1/30
+# commit untuk apply konfigurasi
+commit
+# cek ip ip address apakah sudah tertambah pada interface yang dikonfigurasikan
+run show interfaces terse
+
+
+# konfigurasi router 2
+
+# setting ip address pada router 2
+set interfaces em0 unit 0 family inet address 10.10.10.2/30
+# commit untuk apply konfigurasi
+commit
+# cek ip address apakah sudah tertambah pada interface yang dikonfigurasikan
+run show interfaces terse
+
+
+# cek koneksi antara router 1 dan router 2
+
+# pada router 1
+run ping 10.10.10.2
+-> output
+
+# pada router 2
+run ping 10.10.10.1
+-> output
