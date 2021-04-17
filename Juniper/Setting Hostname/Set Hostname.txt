@@ -1,0 +1,8 @@
+# ditulis pada 17-04-2021
+
+# mengganti nama pada JunOS
+set system host-name Router-1
+# dan lakukan commit
+commit
+
+-> cek hostname pada router
