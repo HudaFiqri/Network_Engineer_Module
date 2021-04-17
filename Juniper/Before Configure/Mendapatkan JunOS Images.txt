@@ -1,0 +1,15 @@
+# ditulis pada 18-04-2021
+
+images bisa di dapatkan melaui situs official dari juniper sendiri akan tetapi cuma beberapa saja virtual image yang di perbolehkan akses oleh juniper sendiri
+sedangkan jika melalui internet ada beberapa situs yang bisa digunakan dan beberapanya menyediakan images update dari juniper dan di simpan dalam drive untuk
+di share bersama.
+
+webiptek
+https://blog.webiptek.com/2020/06/download-juniper-vmx-vsrx-vqfx-free.html
+
+Srijit Banerjee
+https://drive.google.com/drive/folders/12_B76r1X6eDI22K0Ugu1f_lwJhQtSaef
+
+
+beberapa web tersebut menyediakan images untuk juniper images untuk lab kali ini saya menggunakan juniper olive dikarenakan kondisi paket data yang tidak kuat
+dan jika menggunakan VMX bisa memakan paket data sekitar 5GB jadi saya memutuskan untuk menggunakan juniper olive dikarenakan cuma 200+MB
