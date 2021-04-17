@@ -1,0 +1,14 @@
+# ditulis pada 17-04-2021
+
+
+# sebelum masuk masuk terlebih dahulu kedalam sistem karena JunOS menggunakan FreeBSD
+
+cli # masuk ke dalam sistem
+configure # masuk mode privileged
+
+
+# untuk kembali ke 1 menu
+up
+
+# untuk kembali ke awal
+top
