@@ -1,0 +1,32 @@
+# ditulis pada 18-04-2021
+
+
+
+# konfigurasi Sub-Interface pada JunOS
+
+
+# berikut adalah command yang bisa digunakan dalam membangun sebuah sub-interface pada JunOS
+
+# bisa menggunakan yang seperti ini
+set interfaces em1 vlan-tagging unit 0 vlan-id 10 family inet address 10.10.10.1/24
+# maupun yang seperti ini
+set interfaces em1 vlan-tagging unit 10 vlan-id 10 family inet address 10.10.10.1/24
+
+# bisa dilihat dari perbedaan command di atas di bagian unit walaupun berbeda dengan nomor dari vlan id sub interface masih akan terbentuk
+  untuk cisco jika sub interface menggunakan misalnya untuk konfigurasi sub-interface fa0/0.10 maka di juniper em1.10, .10 itu hanyalah sebuah
+  penomoran pada interface agar memudahkan administrator jaringan dalam membuat sub-interface, walaupun nomor interfacenya em1.20 tapi taggingnya
+  adalah vlan 10 maka vlan yang bisa dilewatkan adalah vlan 10
+
+
+# untuk konfigurasi
+
+# konfigurasikan terlebih dahulu interface seperti biasa dengan penentuan interface mana yang akan menjadi sub-interface
+set interfaces em0 vlan-tagging unit 10 vlan-id 10 family inet address 10.10.10.1/24
+# lalu lakukan commit untuk apply konfigurasi
+commit
+
+
+# lalu untuk topologi jaringan ini saya menggunakan switch cisco untuk pembuatan vlan dan trunking vlan
+# setelah pembuatan vlan sudah dilakukan di switch cisco lanjut pemberian ip address di switch cisco dan trunking interface yang menuju ke router
+# setelah selesai mengkonfigurasikan switch cisco lalu uji coba ping dengan kedua device
+-> output
