@@ -15,8 +15,8 @@ commit
 
 # pada router 2
 
-interfaces em0 unit 0 family inet address 10.10.10.2/30 # ini interface antar sesama router
-interfaces em1 unit 0 family inet address 30.30.30.1/24
+set interfaces em0 unit 0 family inet address 10.10.10.2/30 # ini interface antar sesama router
+set interfaces em1 unit 0 family inet address 30.30.30.1/24
 
 # dan lakukan commit untuk apply konfigurasi
 commit
