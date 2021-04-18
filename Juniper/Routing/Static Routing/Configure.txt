@@ -1,0 +1,49 @@
+# ditulis pada 18-04-2021
+
+
+
+# setting ip address pada kedua router terlebih dahulu
+
+
+# pada router 1
+set interfaces em0 unit 0 family inet address 10.10.10.1/30 # ini interface antar sesama router
+set interfaces em1 unit 0 family inet address 20.20.20.1/24
+
+# dan lakukan commit untuk apply konfigurasi
+commit
+
+
+# pada router 2
+
+interfaces em0 unit 0 family inet address 10.10.10.2/30 # ini interface antar sesama router
+interfaces em1 unit 0 family inet address 30.30.30.1/24
+
+# dan lakukan commit untuk apply konfigurasi
+commit
+
+
+# lakukan pengetesan ping pada kedua router
+ping router 1 -> router 2
+ping router 2 -> router 1
+
+
+
+# konfigurasi static route
+
+
+# static route pada router 1
+routing-options static route 30.30.30.0/24 next-hop 10.10.10.2
+
+
+# static route pada router 2
+routing-options static route 20.20.20.0/24 next-hop 10.10.10.1
+
+
+
+# lakukan pengetesan koneksi antara pc Client yang terhubung
+
+PC1 -> router1
+PC1 -> PC2
+
+PC2 -> router2
+PC2 -> PC1
