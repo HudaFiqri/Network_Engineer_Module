@@ -1,0 +1,11 @@
+# ditulis pada 18-04-2021
+
+
+
+# backup pada JunOS
+
+# untuk basic backupnya
+save [nama file]
+
+# data backup akan tersimpan di direktory /root
+# untuk tranfer data file backup bisa menggunakan FTP maupun SSH

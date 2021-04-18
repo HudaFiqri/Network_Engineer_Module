@@ -1,0 +1,16 @@
+# ditulis pada 18-04-2021
+
+
+
+# restore pada JunOS
+
+# untuk basic restorenya
+load [nama file]
+
+# load data backupnya jika di dalam folder data backupnya bisa ditambahkan direktori folder yang dibuat untuk
+  penyimpanan file backupnya
+
+# cek konfigurasi
+show
+
+-> output

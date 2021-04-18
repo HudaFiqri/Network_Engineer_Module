@@ -1,0 +1,14 @@
+# ditulis pada 18-04-2021
+
+
+
+# reset default factory pada JunOS
+
+# untuk basic backupnya
+load factory-default
+
+# cek konfigurasi apakah sudah bersih atau masih tetap ada konfigurasi yang tersimpan
+show
+
+# jika konfigurasi sudah bersih maka tinggal commit untuk applys
+commit
