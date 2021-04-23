@@ -1,0 +1,54 @@
+# ditulis pada 22-04-2021
+
+
+
+# konfigurasi basic OSPF pada juniper
+
+
+# konfigurasi ip address pada 3 router
+
+# router1
+set interfaces em0 unit 0 family inet address 10.10.10.1/30
+set interfaces em1 unit 0 family inet address 10.10.10.10/30
+
+# router2
+set interfaces em0 unit 0 family inet address 10.10.10.2/30
+set interfaces em1 unit 0 family inet address 10.10.10.5/30
+
+# router3
+set interfaces em0 unit 0 family inet address 10.10.10.6/30
+set interfaces em1 unit 0 family inet address 10.10.10.9/30
+
+
+
+# untuk juniper saat mengkonfigurasikan ospf hanya perlu mengkonfigurasikan ip address pada interface yang akan
+  dihubungkan ospfnya jika ip addressnya di interface telah di konfigurasi maka tinggal mengkonfigurasi ospfnya.
+  tidak seperti cisco ataupun mikrotik yang harus konfigurasi network terlebih dahulu agar ospfnya bisa berjalan,
+  untuk di juniper tinggal mengkonfigurasikan ip address di interface dan enable protocol ospfnya, maka ospf akan
+  berjalan
+
+
+
+# konfigurasi ospf
+
+# router1
+set protocols ospf area 0.0.0.0 interface em0.0
+set protocols ospf area 0.0.0.0 interface em1.0
+
+# router2
+set protocols ospf area 0.0.0.0 interface em0.0
+set protocols ospf area 0.0.0.0 interface em1.0
+
+# router3
+set protocols ospf area 0.0.0.0 interface em0.0
+set protocols ospf area 0.0.0.0 interface em1.0
+
+
+# jangan lupa untuk commit agar konfigurasi ter-apply
+commit
+
+# coba cek table route apakah sudah tertambah
+run show route
+
+# coba cek table route ospf
+run show route protocol ospf

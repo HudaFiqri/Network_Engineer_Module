@@ -1,0 +1,16 @@
+# ditulis pada 22-04-2021
+
+
+
+# konfigurasi hello dan dead timer ospf pada juniper
+# konfigurasi dapat dilakukan apabila ospf akan dijalankan
+
+
+# konfigurasi hello timer dan dead timer
+
+# konfigurasi
+set protocols ospf area 0.0.0.0 interface em0.0 hello-interval 5 dead-interval 6
+
+# penjelasan
+# 5 dan 6 adalah waktu yang dibutuhkan ospf untuk memulai ulang sambungan, jika waktu yang dikonfigurasikan
+# antar setiap router berbeda maka ospf tidak akan bisa adjency karena perbedaan waktu yang dibutuhkan
