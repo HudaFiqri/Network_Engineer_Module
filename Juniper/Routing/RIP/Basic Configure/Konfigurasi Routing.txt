@@ -1,0 +1,70 @@
+# ditulis pada 24-04-2021
+
+
+
+# konfigurasi routing rip pada JunOS
+
+
+# konfigurasi interface dan ip address pada setiap router
+
+# router1
+set interfaces em0 unit 0 family inet address 10.10.10.1/30
+set interfaces em1 unit 0 family inet address 10.10.10.9/30
+
+# router2
+set interfaces em0 unit 0 family inet address 10.10.10.2/30
+set interfaces em1 unit 0 family inet address 10.10.10.5/30
+
+# router3
+set interfaces em0 unit 0 family inet address 10.10.10.6/30
+set interfaces em1 unit 0 family inet address 10.10.10.10/30
+
+
+
+# konfigurasi routing policy pada setiap router
+# routing policy untuk di juniper perlu dilakukan agar routing rip bisa berjalan, karena default routing rip di juniper
+# adalah disable maka perlu di accept agar proses routing bisa berjalan, tidak seperti di cisco maupun di mikrotik yang
+# tinggal set konfigurasi maka routing akan berjalan sendirinya, untuk juniper routing rip perlu dikonfigurasi policynya
+# agar routingnya jalan.
+
+
+# router1
+set policy-options policy-statement rip_pol term rip_term from protocol [ direct rip ] then accept
+
+# router1
+set policy-options policy-statement rip_pol term rip_term from protocol [ direct rip ] then accept
+
+# router1
+set policy-options policy-statement rip_pol term rip_term from protocol [ direct rip ] then accept
+
+
+
+# konfigurasi routing rip pada setiap router
+
+
+# router1
+protocols rip group rip_net export rip_pol
+protocols rip neighbor em1
+protocols rip neighbor em0
+
+# router2
+protocols rip group rip_net export rip_pol
+protocols rip neighbor em1
+protocols rip neighbor em0
+
+# router3
+protocols rip group rip_net export rip_pol
+protocols rip neighbor em1
+protocols rip neighbor em0
+
+
+
+# setelah konfigurasi dirasa pas apply konfigurasi dengan commit
+commit
+
+
+# nah coba cek routing tablenya apakah informasi routingnya sudah masuk atau belum
+run show route
+
+# coba cek untuk table routing rip
+run show route protocol rip
