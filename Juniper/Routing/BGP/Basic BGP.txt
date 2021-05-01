@@ -1,0 +1,60 @@
+# ditulis pada 30-04-2021
+
+=====================================================================================================
+
+konfigurasi bgp pada JunOS
+sebelum memulai konfigurasi, harap terlebih dahulu untuk mengkonfigurasikan ip address pada setiap
+interface
+
+=====================================================================================================
+
+# untuk susunan hirarki konfigurasi seperti berikut
+
+protocols {
+    bgp {
+        group ebgp {
+            type external;		# ini di konfigurasikan atau tidak gak ada masalah
+            local-as 10;		# ini set local as
+            neighbor 20.20.20.2 {	# set neighbor address
+                peer-as 20;		# ini set neighbor as
+
+                
+# untuk command-nya seperti berikut
+
+edit protocols bgp group ebgp type external local-as 10
+set neighbor 20.20.20.2 peer-as 20
+
+=====================================================================================================
+
+# lalu tambahkan routing policy agar saat routing sudah established router tetangga akan menerima
+# informasi routing table
+
+# untuk hirarki konfigurasi seperti berikut
+
+policy-options {
+    policy-statement bgp_pol {
+        term bgp_term {
+            from protocol direct;
+            then accept;
+
+# untuk command-nya seperti berikut
+
+edit policy-options policy-statement bgp_policy term bgp_term
+set from protocol direct
+set then accept
+
+=====================================================================================================
+
+# lalu setelah konfigurasi benar pastikan untuk commit konfigurasi agar konfigurasi ter-apply
+# pada system
+
+commit
+
+=====================================================================================================
+
+# coba untuk dicek konfigurasi pada router apakah sudah terhubung
+
+run show bgp neighbor
+run show bgp summary
+run show route
+run show route protocol bgp 
