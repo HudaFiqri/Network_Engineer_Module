@@ -31,10 +31,10 @@ set interfaces em1 unit 0 family inet address 10.10.10.10/30
 # router1
 set policy-options policy-statement rip_pol term rip_term from protocol [ direct rip ] then accept
 
-# router1
+# router2
 set policy-options policy-statement rip_pol term rip_term from protocol [ direct rip ] then accept
 
-# router1
+# router3
 set policy-options policy-statement rip_pol term rip_term from protocol [ direct rip ] then accept
 
 
