@@ -1,54 +1,97 @@
 # ditulis pada 22-04-2021
+# di revisi pada 01-05-2021
+
+=====================================================================================================
+
+untuk juniper saat mengkonfigurasikan ospf hanya perlu mengkonfigurasikan ip address pada interface
+yang akan dihubungkan ospfnya jika ip addressnya di interface telah di konfigurasi maka tinggal
+mengkonfigurasi ospfnya. tidak seperti cisco ataupun mikrotik yang harus konfigurasi network
+terlebih dahulu agar ospfnya bisa berjalan, untuk di juniper tinggal mengkonfigurasikan ip address
+di interface dan enable protocol ospfnya, maka ospf akan berjalan.
+
+sebelum mengkonfigurasikan ospf buat terlebih dahulu routing policy-nya, routing policy akan
+berguna ketika router akan meng-export routing table-nya keluar, misalnya ketika sesudah
+mengkonfigurasikan ospf tapi routing table di router sebelah tidak terupdate, maka routing policy
+perlu di cek, jika sudah di perbolehkan untuk meng-export routing table maka router sebelah akan
+mendapatkan routing table baru.
+
+=====================================================================================================
+
+# konfigurasi routing policy
+
+untuk hirarki konfigurasi seperti berikut
+
+policy-options {
+    policy-statement ospf_policy {
+        term ospf_term {
+            from protocol direct;
+            then accept;
 
 
-
-# konfigurasi basic OSPF pada juniper
-
-
-# konfigurasi ip address pada 3 router
+# untuk command-nya seperti berikut
 
 # router1
-set interfaces em0 unit 0 family inet address 10.10.10.1/30
-set interfaces em1 unit 0 family inet address 10.10.10.10/30
+edit policy-options policy-statement ospf_policy term ospf_term
+set from protocol direct
+then accept
 
 # router2
-set interfaces em0 unit 0 family inet address 10.10.10.2/30
-set interfaces em1 unit 0 family inet address 10.10.10.5/30
+edit policy-options policy-statement ospf_policy term ospf_term
+set from protocol direct
+then accept
 
 # router3
-set interfaces em0 unit 0 family inet address 10.10.10.6/30
-set interfaces em1 unit 0 family inet address 10.10.10.9/30
+edit policy-options policy-statement ospf_policy term ospf_term
+set from protocol direct
+then accept
+
+=====================================================================================================
+
+# konfigurasi routing ospf
+
+# untuk hirarki konfigurasi seperti berikut
+protocols {
+    ospf {
+        export ospf_policy;
+        area 0.0.0.0 {          # pemilihan area pada ospf
+            interface em0.0     # nah ini untuk pemilihan jalur ospf pada interface
+        }
+    }
+}
 
 
-
-# untuk juniper saat mengkonfigurasikan ospf hanya perlu mengkonfigurasikan ip address pada interface yang akan
-  dihubungkan ospfnya jika ip addressnya di interface telah di konfigurasi maka tinggal mengkonfigurasi ospfnya.
-  tidak seperti cisco ataupun mikrotik yang harus konfigurasi network terlebih dahulu agar ospfnya bisa berjalan,
-  untuk di juniper tinggal mengkonfigurasikan ip address di interface dan enable protocol ospfnya, maka ospf akan
-  berjalan
-
-
-
-# konfigurasi ospf
+# untuk command-nya seperti berikut
 
 # router1
-set protocols ospf area 0.0.0.0 interface em0.0
-set protocols ospf area 0.0.0.0 interface em1.0
+edit protocols ospf
+set export ospf_policy
+set area 0.0.0.0 interface em0.0
+set area 0.0.0.0 interface em1.0
 
 # router2
-set protocols ospf area 0.0.0.0 interface em0.0
-set protocols ospf area 0.0.0.0 interface em1.0
+edit protocols ospf
+set export ospf_policy
+set area 0.0.0.0 interface em0.0
+set area 0.0.0.0 interface em1.0
 
 # router3
-set protocols ospf area 0.0.0.0 interface em0.0
-set protocols ospf area 0.0.0.0 interface em1.0
+edit protocols ospf
+set export ospf_policy
+set area 0.0.0.0 interface em0.0
+set area 0.0.0.0 interface em1.0
 
+=====================================================================================================
 
 # jangan lupa untuk commit agar konfigurasi ter-apply
 commit
 
+=====================================================================================================
+
 # coba cek table route apakah sudah tertambah
 run show route
-
-# coba cek table route ospf
 run show route protocol ospf
+
+# lalu coba cek protocol ospfnya
+run show ospf neighbor 
+run show ospf database 
+run show ospf interface 
