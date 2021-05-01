@@ -5,7 +5,7 @@
 
 konfigurasi bgp pada JunOS
 sebelum memulai konfigurasi, harap terlebih dahulu untuk mengkonfigurasikan ip address pada setiap
-interface
+interface, dalam kasus ini saya menggunakan EBGP(external BGP) untuk mengkonfigurasi
 
 =====================================================================================================
 
@@ -13,16 +13,22 @@ interface
 
 protocols {
     bgp {
+        export bgp_pol;
         group ebgp {
-            type external;		# ini di konfigurasikan atau tidak gak ada masalah
-            local-as 10;		# ini set local as
+            type external;		    # ini di konfigurasikan atau tidak gak ada masalah
+            local-as 10;		    # ini set local as
             neighbor 20.20.20.2 {	# set neighbor address
-                peer-as 20;		# ini set neighbor as
+                peer-as 20;		    # ini set neighbor as
 
                 
 # untuk command-nya seperti berikut
 
-edit protocols bgp group ebgp type external local-as 10
+edit protocols bgp group ebgp
+set export bgp_pol
+
+edit group ebgp
+set type external
+set local-as 10
 set neighbor 20.20.20.2 peer-as 20
 
 =====================================================================================================
