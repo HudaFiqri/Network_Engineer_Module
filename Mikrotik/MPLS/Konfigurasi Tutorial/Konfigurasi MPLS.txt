@@ -1,0 +1,148 @@
+# ditulis pada 09-05-2021
+
+# sumber referensi
+- https://citraweb.com/artikel_lihat.php?id=242
+
+
+===================================================================================================
+
+MPLS(Multi Protocol Labeling Switching)
+
+MPLS digunakan ketika membuat suatu jaringan enterprise atau jaringan besar yang contohnya
+digunakan untuk menghubungkan suatu site dengan forward paket yang akan kirimkan melalui jaringan
+MPLS.
+
+MPLS juga digunakan untuk melakukan forwarding paket data dengan menggunakan label. jadi saat paket
+akan melewati router paket akan di labeling di router LER(Label Edge Router) dan akan diteruskan
+oleh router LSR(Label Switching Router).
+
+
+LER(Label Edge Router)
+    - menambahkan label pada paket data yang akan lewat
+    - menghapus label pada paket data yang akan datang
+
+LSR(Label Switching Router)
+    - melakukan forwarding paket data
+
+
+Posisi router pada MPLS:
+    - P (Provider)
+      Router backbone yang melakukan forwarding paket data ke router PE(Provider Edge). Biasanya
+      para router ini akan menggunakan routing IGP/EGP untuk proses routing dan untuk routing
+      yang sering dipakai di router ini adalah routing OSPF atau BGP.
+
+    - PE (Provider Edge)
+      Router yang terhubung ke router pelangan dan melakukan labeling pada paket data yang akan
+      datang. pada router ini akan terhubung dengan routing pada router P(Provider) pada router
+      ini hanya informasi routing pada router P(Provider) dan router PE(Provider Edge) yang akan
+      dimasukkan ke dalam infomasi routing, sedangkan informasi pada router
+      CE(Customer Edge) tidak dimasukkan.
+
+    - CE (Customer Edge)
+      Pada Router ini Router akan terhubung ke router CE(Customer Edge) yang lain dengan
+      menggunakan tunneling VPLS pada router PE(Provider Edge). dan untuk menghubungkannya di
+      router CE dibuatlah sebuah routing static untuk menghubungkan network ke network tunneling
+      VPLS dan untuk kelanjutan routingnya akan dibahas di bawah.
+
+
+===================================================================================================
+
+# Konfigurasi IP Address pada setiap router
+
+
+# P-Router-1
+- ip add add address=50.50.50.50/32 network=50.50.50.50 interface=Loopback
+- ip add add address=10.10.10.1/30 network=10.10.10.0 interface=ether1
+- ip add add address=10.10.10.5/30 network=10.10.10.4 interface=ether2
+
+# P-Router-2
+- /ip add add address=50.50.50.49/32 network=50.50.50.49 interface=Loopback
+- /ip add add address=10.10.10.2/30 network=10.10.10.0 interface=ether1
+- /ip add add address=10.10.10.9/30 network=10.10.10.8 interface=ether2
+- /ip add add address=20.20.20.1/30 network=20.20.20.0 interface=ether3
+
+# P-Router-3
+- /ip add add address=50.50.50.48/32 network=50.50.50.48 interface=Loopback
+- /ip add add address=10.10.10.6/30 network=10.10.10.4 interface=ether1
+- /ip add add address=10.10.10.10/30 network=10.10.10.8 interface=ether2
+- /ip add add address=20.20.20.5/30 network=20.20.20.4 interface=ether3
+
+# PE-Router-1
+- /ip add add address=50.50.50.47/32 network=50.50.50.47 interface=Loopback
+- /ip add add address=20.20.20.2/30 network=20.20.20.0 interface=ether1
+- /ip add add address=40.40.40.1/30 network=40.40.40.0 interface=ether2
+
+# PE-Router-2
+- /ip add add address=50.50.50.46/32 network=50.50.50.46 interface=Loopback
+- /ip add add address=20.20.20.6/30 network=20.20.20.4 interface=ether1
+- /ip add add address=40.40.40.5/30 network=40.40.40.4 interface=ether2
+
+# CPE-Router-1
+- /ip add add address=40.40.40.2/30 network=40.40.40.0 interface=ether1
+- /ip add add address=50.50.50.45/32 network=10.10.10.45 interface=Loopback
+
+# CPE-Router-2
+- /ip add add address=40.40.40.6/30 network=40.40.40.4 interface=ether1
+- /ip add add address=50.50.50.44/32 network=50.50.50.44 interface=Loopback
+
+
+===================================================================================================
+
+# Konfigurasi Routing Dynamic OSPF
+
+# P-Router-1
+- /routing rip network add network=50.50.50.50/32
+- /routing rip network add network=10.10.10.0/32
+- /routing rip network add network=10.10.10.4/32
+
+# P-Router-2
+- /routing rip network add network=10.10.10.0/30 
+- /routing rip network add network=10.10.10.4/30 
+- /routing rip network add network=20.20.20.0/30 
+- /routing rip network add network=50.50.50.49/32 
+
+# P-Router-3
+- /routing rip network add network=50.50.50.48/32 
+- /routing rip network add network=20.20.20.4/30 
+- /routing rip network add network=10.10.10.8/30 
+- /routing rip network add network=10.10.10.4/30 
+
+
+# lalu cek table routing di semua router apakah sudah terupdate dengan table routing RIP
+- /ip route print brief
+- /ip route print detail
+
+===================================================================================================
+
+# Konfigurasi MPLS pada router P dan PE
+
+# P-Router-1
+- /mpls ldp set enabled=yes
+- /mpls ldp set set lsr-id=50.50.50.50               # untuk lsr-id gunakan ip loopback
+- /mpls ldp set set transport-address=50.50.50.50    # untuk transport address gunakan ip loopback
+
+# P-Router-2
+- /mpls ldp set enabled=yes
+- /mpls ldp set set lsr-id=50.50.50.49
+- /mpls ldp set set transport-address=50.50.50.49
+
+# P-Router-3
+- /mpls ldp set enabled=yes
+- /mpls ldp set set lsr-id=50.50.50.48
+- /mpls ldp set set transport-address=50.50.50.48
+
+# PE-Router-1
+- /mpls ldp set enabled=yes
+- /mpls ldp set lsr-id=50.50.50.47
+- /mpls ldp set transport-address=50.50.50.50
+
+# PE-Router-2
+- /mpls ldp set enabled=yes
+- /mpls ldp set set lsr-id=50.50.50.46
+- /mpls ldp set set transport-address=50.50.50.50
+
+
+# cek mpls Konfigurasi apakah sudah terhubung atau tidak
+# jika tidak terhubung maka cek routingnya apakah sudah terhubung atau belum
+- /mpls local-bindings print
+- /mpls remote-bindings print

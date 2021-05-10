@@ -1,0 +1,67 @@
+# ditulis pada 10-05-2021
+
+# sumber referensi
+- https://citraweb.com/artikel_lihat.php?id=242
+
+NOTE: VPLS bisa dilakukan apabila MPLS sudah jalan
+
+===================================================================================================
+
+VPLS(Virtual Private Lan Services)
+
+VPLS bisa di sebut dengan L2VPN dan EoVPN. dengan VPLS tunnel dapat dibuat jaringan tunnel private
+yang dapat menghubungkan antar router PE(Provider Edge), karena perangkat CE tidak dapat terhubung
+maka dengan VPLS dapat di buat jaringan private dengan metode tunneling.
+
+===================================================================================================
+
+# Konfigurasi VPLS
+
+# PE-Router-1
+- /interface vpls add name=VPLS-conn remote-peer=50.50.50.46 vpls-id=1:1    # remote-peer menggunakan ip loopback
+                                                                            # PE router tetangga
+
+# PE-Router-2
+- /interface vpls add name=VPLS-conn remote-peer=50.50.50.47 vpls-id=1:1
+
+
+# monitoring interface VPLS
+# cek konfigurasi apakah sudah berjalan atau belum
+- /interface vpls monitor numbers=0
+
+===================================================================================================
+
+# jika VPLS sudah berjalan maka tinggal bridging interface dari VPLS menuju ke interface CPE
+
+# buat interface VPLS dulu di setiap router PE
+- /interface bridge add name=VPLS
+- /interface bridge port add interface=ether2 bridge=VPLS-conn
+
+===================================================================================================
+
+# jika VPLS sudah terhubung dan bridging sudah terbentuk maka tinggal membuat routing static untuk
+# menghubungkan network dari CPE menuju ke VPLS PE
+
+# PE-Router-1
+- /ip route add dst-address=0.0.0.0/0 gateway=1.1.1.2
+
+# PE-Router-2
+- /ip route add dst-address=0.0.0.0/0 gateway=1.1.1.1
+
+# CPE-Router-1
+- ip route add dst-address=1.1.1.0/30 gateway=40.40.40.1
+- ip route add dst-address=40.40.40.4/30 gateway=40.40.40.1
+
+# CPE-Router-2
+- ip route add dst-address=1.1.1.0/30 gateway=40.40.40.5
+- ip route add dst-address=40.40.40.0/30 gateway=40.40.40.5
+
+
+# jika router sudah saling terhubung antar CPE maka coba ping ke ip loopback masing-masing router
+/ping 50.50.50.45
+/ping 50.50.50.44
+
+===================================================================================================
+
+# jika sudah terhubung maka bisa dibuat tunelling di masing-masing router CPE misalnya mau memakai
+# tunnel GRE atau IPIP, atau bisa juga memakai VPN agar terjadi komunikasi point to point
