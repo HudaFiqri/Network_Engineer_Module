@@ -42,5 +42,17 @@ remote-as=10
 
 =====================================================================================================
 
+# konfigrasi network pada router
+
+# Router R1
+/routing bgp network add network=10.10.10.0/30
+/routing bgp network add network=50.50.50.50/32
+
+# Router R2
+/routing bgp network add network=10.10.10.0/30
+/routing bgp network add network=50.50.50.49/32
+
+=====================================================================================================
+
 # lalu coba cek table routing apakah sudah ada update dari routing bgp
 /ip route print
