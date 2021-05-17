@@ -1,0 +1,26 @@
+# ditulis pada 17-05-2021
+
+=====================================================================================================
+
+Dengan menggunakan default-originate maka routing bgp akan secara otomatis menambahkan defautl
+routing kedalam table routing.
+
+Untuk melakukan konfigurasi ini harap konfigurasi terlebih dahulu routing bgp dan pastikan router
+sudah bisa saling terhubung antar router bgp.
+
+=====================================================================================================
+
+# konfigurasi default originate
+
+/routing bgp peer add name=to-R3 \
+instance=default \
+remote-address=10.10.10.3 \
+remote-as=30 \
+default-originate=always #default originate digunakan untuk melakukan default routing
+
+=====================================================================================================
+
+# jika konfigurasi sudah dilakukan coba cek router tetangga apakah sudah mendapatkan default routing
+# dari bgp
+
+/ip route print

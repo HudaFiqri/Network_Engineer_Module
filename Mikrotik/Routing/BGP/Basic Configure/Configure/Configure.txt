@@ -1,0 +1,46 @@
+# ditulis pada 17-05-2021
+# referensi: - https://citraweb.com/artikel_lihat.php?id=170
+
+=====================================================================================================
+
+BGP merupakan routing yang umumnya digunakan untuk masalah pemilihan jalur terbaik menurut algoritma
+dari routing bgp sendiri.
+
+BGP biasanya dipakai untuk menghubungkan routing antar AS(autonomus system) yang sudah masuk ke
+dalam routing external atau EGP, dan BGP juga biasanya digunakan untuk menjadi routing tulang
+punggung antar internet exchange. BGP menggunakan koneksi TCP untuk pertukaran informasi antar BGP
+
+=====================================================================================================
+
+# konfigurasi routing BGP
+
+# Router R1
+/routing bgp instance set numbers=0 \
+as=10 \
+router-id=50.50.50.50 # router id dipilih menggunakan ip address dari loopback
+
+# Router R2
+/routing bgp instance set numbers=0 \
+as=20 \
+router-id=50.50.50.49 # router id dipilih menggunakan ip address dari loopback
+
+=====================================================================================================
+
+# konfigurasi peering antar router
+
+# Router R1
+/routing bgp peer add name="to R2" \
+instance=default \
+remote-address=10.10.10.2 \ # ip address remote address menggunakan ip address dari router tetangga
+remote-as=20 # remote address menggunakan as dari tetangga
+
+# Router R2
+/routing bgp peer add name="to R3" \
+instance=default \
+remote-address=10.10.10.1 \
+remote-as=10
+
+=====================================================================================================
+
+# lalu coba cek table routing apakah sudah ada update dari routing bgp
+/ip route print
