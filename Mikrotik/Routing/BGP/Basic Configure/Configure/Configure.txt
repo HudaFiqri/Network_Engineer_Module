@@ -35,7 +35,7 @@ remote-address=10.10.10.2 \ # ip address remote address menggunakan ip address d
 remote-as=20 # remote address menggunakan as dari tetangga
 
 # Router R2
-/routing bgp peer add name="to R3" \
+/routing bgp peer add name="to R1" \
 instance=default \
 remote-address=10.10.10.1 \
 remote-as=10
